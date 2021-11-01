@@ -1,0 +1,51 @@
+version: "3.3"
+
+networks:
+  app:
+
+services:
+  scrapper:
+    build: .
+    # image: deniskozlov94/first # scrapper_binance_announce_page
+    container_name: scrapper_binance_announce_page
+    environment:
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_PORT=$POSTGRES_PORT
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    depends_on:
+      - postgres
+    networks:
+      - app
+
+#  worker:
+#    # build: .
+#    image: deniskozlov94/second # worker_binance_announce
+#    container_name: worker_binance_announce
+#    environment:
+#      - QUANTITY_USDT=$QUANTITY_USDT
+#      - GATEIO_API_KEY=$GATEIO_API_KEY
+#      - GATEIO_API_SECRET=$GATEIO_API_SECRET
+#      - POSTGRES_HOST=$POSTGRES_HOST
+#      - POSTGRES_PORT=$POSTGRES_PORT
+#      - POSTGRES_USER=$POSTGRES_USER
+#      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+#      - POSTGRES_DB=$POSTGRES_DB
+#    depends_on:
+#      - scrapper
+#    networks:
+#      - app
+
+  postgres:
+    image: postgres:latest
+    # platform: linux/x86_64
+    restart: always
+    container_name: postgres
+    command: postgres -c listen_addresses='*'
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    networks:
+      - app

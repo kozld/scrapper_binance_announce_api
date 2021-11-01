@@ -1,0 +1,5 @@
+# Ignore environments
+.env
+
+# Ignore IDE meta
+.idea
